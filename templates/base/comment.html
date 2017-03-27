@@ -1,0 +1,103 @@
+{% load blog_templatetags %}
+<style type="text/css">
+    .blog-post {
+        margin-bottom: 10px
+    }
+
+    .ds-comment-body p ,.ds-comment-body_zi p{
+        margin: 0px;
+    }
+
+    .ds-avatar {
+        width: 50px;
+        height: 50px
+    }
+
+    .ds-avatar_zi {
+        width: 30px;
+        height: 30px
+    }
+
+    .ds-comment-body{
+        margin-left: 60px
+    }
+    .ds-comment-body_zi{
+        margin-left: 40px
+    }
+
+    .ds-post {
+        margin-bottom: 5px
+    }
+    .ul_post {
+        -webkit-padding-start: 0px;
+        font-size: 13px;
+
+    }
+
+    .hig {
+        margin-bottom: 5px;
+        margin-top: 5px
+    }
+</style>
+
+<!-- 评论列表-->
+<ul class="ul_post">
+    {% for row in res.response %}
+    <div class="ds-post">
+        <div style="float: left">
+            <img class="ds-avatar" src="http://q.qlogo.cn/qqapp/100229475/B684B71FE0597B68FBDBE33ED605CD84/100">
+        </div>
+        <div class="ds-comment-body">
+            <p><a href="">{{ row.author }}</a></p>
+            <p>{{ row.comments }}</p>
+            <p><span>{{ row.dateline|time_change_stime }}</span> <span class="glyphicon glyphicon-share-alt"><a href="javascript:void(0);" onclick="show_disp_rep('show_rep_{{ row.id }}', '{{ row.id }}')">回复</a></span>
+            </p>
+        </div>
+    </div>
+    <!-- 1级回复开始  默认隐藏-->
+    <div style="display: none" id="show_rep_{{ row.id }}" class="ds-replybox">
+            <div class="ds-post" style="margin-left: 40px">
+                <div style="float: left">
+                    <img class="ds-avatar_zi" src="http://q.qlogo.cn/qqapp/100229475/B684B71FE0597B68FBDBE33ED605CD84/100">
+                </div>
+                 <div class="ds-comment-body_zi">
+                    <p><textarea id="content_{{ row.id }}" style="width: 541px;height: 106px" name="content" title="Ctrl+Enter快捷提交" placeholder="说点什么吧…"></textarea></p>
+                     <p><button type="button" class="btn btn-default btn-sm" onclick="save_ds_post_reply('{{ row.id }}', '{{ row.id }}')">发送</button></p>
+                </div>
+            </div>
+    </div>
+    <!-- 1级回复开始结束-->
+
+    <hr class="hig">
+        {% for post_zi in row.child %}
+        <!-- 2级评论 -->
+        <ul class="ul_post_zi" style="margin-left: 10px">
+            <div class="ds-post">
+                <div style="float: left">
+                    <img class="ds-avatar_zi" src="http://q.qlogo.cn/qqapp/100229475/B684B71FE0597B68FBDBE33ED605CD84/100">
+                </div>
+                <div class="ds-comment-body_zi">
+                    <p><a href="">{{ post_zi.author }}</a></p>
+                    <p>{{ post_zi.comments }}</p>
+                    <p><span>{{ post_zi.dateline|time_change_stime }}</span> <span class="glyphicon glyphicon-share-alt"><a href="javascript:void(0);" onclick="show_disp_rep('show_rep_zi_{{ post_zi.id }}', '{{ post_zi.id }}')">回复</a></span></p>
+                </div>
+            </div>
+
+            <!-- 2级回复开始  默认隐藏 -->
+            <div id="show_rep_zi_{{ post_zi.id }}" style="display: none" class="ds-post ds-replybox" style="margin-left: 40px">
+                <div style="float: left">
+                    <img class="ds-avatar_zi" src="http://q.qlogo.cn/qqapp/100229475/B684B71FE0597B68FBDBE33ED605CD84/100">
+                </div>
+                 <div class="ds-comment-body_zi">
+                    <p><textarea id="content_{{ post_zi.id }}" style="width: 541px;height: 106px" name="content" title="Ctrl+Enter快捷提交" placeholder="说点什么吧…"></textarea></p>
+                     <p><button type="button" class="btn btn-default btn-sm" onclick="save_ds_post_reply('{{ row.id }}', '{{ post_zi.id }}')">发送</button></p>
+                </div>
+            </div>
+            <!-- 2级回复结束 -->
+            <hr class="hig">
+
+        </ul>
+        <!-- 2级评论结束 -->
+        {% endfor %}
+    {% endfor %}
+</ul>

@@ -1,0 +1,88 @@
+{% extends "base/base.html" %}
+{% load blog_templatetags %}
+{% block title %}{{ object.title }} {% endblock %}
+{% block keywords %}{{ object.title }}{% endblock %}
+{% block description %}{{ object.title }}{% endblock %}
+
+{% block script_css_append %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+        <div class="blog-header">
+            <!--h1 class="blog-title">NOSOGA</h1>
+            <p class="lead blog-description">The official example template of creating a blog with Bootstrap.</p-->
+        </div>
+            <div class="col-sm-111 blog-main">
+                <div class="blog-post">
+                    <h2 class="blog-post-title"><a href="#">{{ object.title }}</a></h2>
+                    <p class="blog-post-meta" style="font-size: 12px"> 发表: {{ object.dateline | date:"Y-m-d H:i:s" }} &nbsp;&nbsp;浏览: {{ object.browse }}&nbsp;&nbsp;{% if request.user.username %}<a href="{% url 'article_edit' object.id %}" target="_blank">编辑</a>{% endif %}</p>
+                    {{ object.brief|safe }}
+                    <p>{{ object.detail|safe }}</p>
+                </div><!-- /.blog-post -->
+
+                <div style="height:50px"></div>
+                <div class="show_comment_txt" style="display: none">
+                    <hr>
+                    <p style="text-align: center">还没有评论，沙发等你来抢</p>
+                    <hr>
+                </div>
+                <div>
+                    <textarea  id="content_ini_data" class="form-control" rows="4"></textarea>
+                    <p><button style="float: right;margin-top: 2px" type="button" class="btn btn-default btn-sm" onclick="save_ds_post_reply('0', 'ini_data')">发表</button></p>
+                </div>
+                <div id="commtens_data"></div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block js_append %}
+<script type="text/javascript">
+
+    get_data()
+    function get_data(){
+        $.post('/blog/discuss_ajax/', {
+            comment_id:{{ object.id }}
+        }, function (e) {
+            if (e == 'not_comment'){
+                $(".show_comment_txt").show();
+            }else{
+                $(".show_comment_txt").hide();
+                $("#commtens_data").empty().html(e);
+            }
+
+        });
+    }
+
+    function show_disp_rep(dis, pk){
+        if($('#' + dis).is(":hidden")){
+            $('.ds-replybox').hide();
+            $('#' + dis).show();
+        }else{
+            $('#' + dis).hide();
+        }
+    }
+
+    function save_ds_post_reply(f_pid, child_id){
+            comments=$('#content_' + child_id).val();
+            $.post('/blog/discuss_post/', {
+                comments:comments,
+                comment_id:'{{ object.id }}',
+                pid:f_pid,
+            }, function (e) {
+                if (e == 'ok'){
+                    get_data()
+                }else{
+                    alert(e);
+                }
+            });
+    }
+
+</script>
+{% endblock %}
+
+

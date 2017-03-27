@@ -1,0 +1,28 @@
+{% extends "base/base.html" %}
+{% load blog_templatetags %}
+{% block title %}{{ queryset.title }} {% endblock %}
+{% block keywords %}{{ queryset.title }}{% endblock %}
+{% block description %}{{ queryset.title }}{% endblock %}
+
+{% block script_css_append %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+        <div class="blog-header">
+            <!--h1 class="blog-title">NOSOGA</h1>
+            <p class="lead blog-description">The official example template of creating a blog with Bootstrap.</p-->
+        </div>
+            <div class="col-sm-111 blog-main">
+                <div class="blog-post">
+                    <h2 class="blog-post-title">{{ content }}</h2>
+                </div><!-- /.blog-post -->
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+
+

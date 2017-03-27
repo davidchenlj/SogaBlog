@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Simditor</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link media="all" rel="stylesheet" type="text/css" href="font-awesome-4.7.0/css/font-awesome.css" />  
+<link media="all" rel="stylesheet" type="text/css" href="styles/simditor.css" />  
+<link href="https://ask.hellobi.com/static/js/simditor/styles/simditor.css?v=20150824" rel="stylesheet" type="text/css" />
+<link href="https://ask.hellobi.com/static/js/highlight/styles/foundation.css?v=20150824" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="scripts/jquery.min.js"></script>  
+<script type="text/javascript" src="scripts/module.js"></script>  
+<script type="text/javascript" src="scripts/uploader.js"></script>  
+<script type="text/javascript" src="scripts/hotkeys.js"></script>
+<script type="text/javascript" src="scripts/simditor.js"></script> 
+</head>
+<body>
+<div style="width: 800px; margin-top: 10px">
+	<textarea id="editor" placeholder="这里输入内容" ></textarea> 
+</div>
+
+<pre><code class="lang-python">class AutoVivification(dict):
+&nbsp; &nbsp; """Implementation of perl's autovivification feature."""
+&nbsp; &nbsp; def __getitem__(self, item):
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;try:
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;return dict.__getitem__(self, item)
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;except KeyError:
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;value = self[item] = type(self)()
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;return value<br></code></pre>
+
+<input text="button" onclick="show_data()">ssss</input>
+
+<script>
+function show_data(){
+
+	console.log($('#editor').val())
+}
+var editor = new Simditor({ 
+	textarea: $('#editor'),
+	upload: true,
+    tabIndent: true,
+    toolbar: true,
+	upload : {  
+	            url : 'ImgUpload.action', //文件上传的接口地址  
+	            params: null, //键值对,指定文件上传接口的额外参数,上传的时候随文件一起提交  
+	            fileKey: 'fileDataFileName', //服务器端获取文件数据的参数名  
+	            connectionCount: 3,  
+	            leaveConfirm: '正在上传文件'  
+	        }
+	 });
+</script>
+</body>
+</html>

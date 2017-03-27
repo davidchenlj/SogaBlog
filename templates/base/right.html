@@ -1,0 +1,67 @@
+<aside id="sidebar" class="sidebar sidebar-module" style="display: block;">
+    <div class="sidebar-inner">
+        <section class="site-overview sidebar-panel sidebar-panel-active">
+            <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="#">
+                <img class="site-author-image" itemprop="image" src="/static/bootstarp/blog/img/logo.jpg" alt="Aitter">
+                <p class="site-author-name" itemprop="name">抠脚大叔</p>
+                <p class="site-description motion-element" itemprop="description"><a href="{% url 'blog_index' %}?search=Python">Python</a> | <a href="{% url 'blog_index' %}?search=Django">Django</a> | <a href="{% url 'blog_index' %}?search=Scrapy">Scrapy</a> | <a href="{% url 'blog_index' %}?search=Selenium">Selenium |
+                    </a><a href="{% url 'blog_index' %}?search=Linux">Linux</a></p>
+            </div>
+            <nav class="site-state motion-element">
+                <div class="site-state-item site-state-posts">
+                    <a href="{% url 'blog_index' %}">
+                        <span class="site-state-item-count">{{ queryset_count }}</span>
+                        <span class="site-state-item-name">日志</span>
+                    </a>
+                </div>
+
+
+                <div class="site-state-item site-state-categories">
+                    <a href="#">
+                        <span class="site-state-item-count">{{ category_count }}</span>
+                        <span class="site-state-item-name">分类</span>
+                    </a>
+                </div>
+
+
+                <div class="site-state-item site-state-tags">
+                    <a href="#">
+                        <span class="site-state-item-count">19</span>
+                        <span class="site-state-item-name">标签</span>
+                    </a>
+                </div>
+            </nav>
+
+
+            <div class="links-of-author motion-element">
+              <span class="links-of-author-item">
+                <a href="https://github.com/davidchenlj" target="_blank" title="GitHub">
+                    <i class="fa fa-fw fa-github"></i>
+                    GitHub
+                </a>
+              </span>
+
+              <span class="links-of-author-item">
+                <a href="#" target="_blank" title="Zhihu">
+                    <i class="fa fa-fw fa-globe"></i>
+                    Zhihu
+                </a>
+              </span>
+            </div>
+
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline" style="margin-left: 5px">
+                <div class="links-of-blogroll-title">
+                    <i class="fa fa-fw fa-globe"></i>
+                    分类
+                </div>
+                <ul class="links-of-blogroll-list">
+                    {% for row in category %}
+                        <li class="links-of-blogroll-item"><a href="{% url 'blog_index' %}?search={{ row.name }}" target="_blank"> {{ row.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </section>
+
+
+    </div>
+</aside>

@@ -1,0 +1,160 @@
+{% extends "bg_base/base.html" %}
+{% load blog_templatetags %}
+{% block script %}
+<link media="all" rel="stylesheet" type="text/css" href="/static/simditor/font-awesome-4.7.0/css/font-awesome.css" />
+<link media="all" rel="stylesheet" type="text/css" href="/static/simditor/styles/simditor.css" />
+
+<script type="text/javascript" src="/static/simditor/scripts/jquery.min.js"></script>
+<script type="text/javascript" src="/static/simditor/scripts/module.js"></script>
+<script type="text/javascript" src="/static/simditor/scripts/uploader.js"></script>
+<script type="text/javascript" src="/static/simditor/scripts/hotkeys.js"></script>
+<script type="text/javascript" src="/static/simditor/scripts/simditor.js"></script>
+
+<script>
+</script>
+
+{% endblock %}
+
+{% block content %}
+    		<style>
+			form {
+				margin: 0;
+			}
+			textarea {
+				display: block;
+			}
+            .form-horizontal .control-label{width: 60px}
+            .form-horizontal .controls{margin-left: 80px}
+            #tag_list{padding-bottom: 5px}
+            #tag_list a{margin-left: 5px;font-weight:inherit}
+            .label{padding:4px 4px 4px}
+		</style>
+    <!-- 头部-->
+    {% include 'bg_base/top.html' %}
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <!-- 左侧菜单-->
+            {% include 'bg_base/left.html' %}
+            <div class="span9">
+                <div class="row-fluid">
+                    <div class="page-header">
+                        <h1>添加文章
+                            <small></small>
+                        </h1>
+                    </div>
+                </div>{{ form.errors }}
+                <form  class="form-horizontal" method="post">{% csrf_token %}
+                    <fieldset>
+                        <div class="control-group">
+                            <label class="control-label" for="city">{{ form.brief.label }}</label>
+                            <div class="controls">
+                                {{ form.title }}{{ form.title.errors }}
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="city">{{ form.access.label }}</label>
+                            <div class="controls">
+                                {{ form.access }}
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="city">{{ form.dateline.label }}</label>
+                            <div class="controls">
+                                {{ form.dateline }}
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="role">{{ form.pid.label }}</label>
+                            <div class="controls">
+                                <select name="pid">
+                                    {% for row in category %}
+                                        <option {% if form.pid.value == row.pk %}selected{% endif %}  value="{{ row.pk }}">{{ row.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label" for="city">{{ form.brief.label }}</label>
+                            <div class="controls">
+                                {{ form.brief }}
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="city">{{ form.detail.label }}</label>
+                            <div class="controls">
+                                {{ form.detail }}
+                            </div>
+
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label" for="city">标签</label>
+                            <div class="controls">
+                                <div id="tag_list" >
+                                   {% if form.tag.value %} {{ form.tag.value|tag_list|safe }}{% endif %}
+                                </div>
+                                <div id="tag_input" style="display: none">{% if form.tag.value %}{{ form.tag.value|tag_input|safe }}{% endif %}</div>
+                                <input type="text" class="form-control" id="id_tag_add" placeholder="标签">&nbsp;<button type="button"  id="add_tag" class="btn btn-primary">添加</button>
+                            </div>
+                        </div>
+
+                        <div style="display: none">
+                            {{ form.browse }}
+                            {{ form.flag }}</div>
+                        <div class="form-actions">
+                            <input type="submit" class="btn btn-success" value="保存"/> <a class="btn"  href="/blog/category/">返回</a>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js_append %}
+<script type="text/javascript">
+    $("#add_tag").click(function(){
+        var tag_data = $('#id_tag_add').val()
+        $('#tag_list').append('<a href="javascript:void(0)" name="span_tag" class="label label-success">' + tag_data + '</a>');
+        $('#tag_input').append('<input type="text" name="tag" value="' + tag_data + '">');
+    });
+
+    $(document).on('click', "a[name='span_tag']", function(){
+        var v=$(this).text();
+        $(this).remove()
+        $("input[value='" + v + "']").remove()
+    })
+
+    var toolbar= ['title','bold', 'italic', 'underline','strikethrough','fontScale', 'color', '|', 'ol', 'ul', '|', 'blockquote','code','table','link','image','hr','indent', 'outdent','alignment']
+    var brief = new Simditor({
+        textarea: $('#id_brief'),
+        upload: true,
+        tabIndent: true,
+        toolbar: toolbar,
+        upload : {
+                    url : '/blog/uploadImg/',
+                    params: null,
+                    fileKey: 'imgFile',
+                    connectionCount: 3,
+                    leaveConfirm: '正在上传文件'
+                }
+         });
+
+    var detail = new Simditor({
+        textarea: $('#id_detail'),
+        upload: true,
+        tabIndent: true,
+        toolbar: toolbar,
+        upload : {
+                    url : '/blog/uploadImg/',
+                    params: null,
+                    fileKey: 'imgFile',
+                    connectionCount: 3,
+                    leaveConfirm: '正在上传文件'
+                }
+         });
+</script>
+{% endblock %}
+
+

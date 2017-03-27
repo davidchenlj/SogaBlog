@@ -1,0 +1,67 @@
+html, body {
+    height: 100%;
+}
+
+tbody {
+    font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+    font-size: 12px
+}
+
+h1 {
+    font-size: 20px
+}
+
+.syntaxhighlighter {
+    font-size: 0.8em !important
+}
+
+.syntaxhighlighter .toolbar {
+    display: none;
+}
+
+a:hover {
+    text-decoration: none;
+    color: #b8747e
+}
+
+.post-category {
+    margin: 0 0.1em;
+    padding: 0.3em 1em;
+    color: #fff;
+    background: #999;
+    font-size: 80%;
+}
+
+.post-category-design {
+    background: #5aba59;
+}
+
+.post-category-pure {
+    background: #4d85d1;
+}
+
+.post-category-yui {
+    background: #8156a7;
+}
+
+.post-category-js {
+    background: #df2d4f;
+}
+
+.post-category-ye {
+    background: #FFD700;
+}
+
+.post-category-chengse {
+    background: #FF7F24;
+}
+
+pre {
+    background-color: transparent;
+    font-size: 12px;
+    border: 0px solid #ccc;
+    border-left: 5px solid #eee;
+}
+
+.sidebar p{line-height:2}
+.sidebar-inner{padding: 0px 10px}

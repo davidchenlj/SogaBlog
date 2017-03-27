@@ -1,0 +1,8 @@
+<div class="sidebar-module" style="color: #000000">
+    <h4>分类</h4>
+    <ol class="list-unstyled">
+        {% for row in category %}
+            <li><a href="{% url 'blog_index' %}?search={{ row.name }}" target="_blank"> {{ row.name }}</a></li>
+        {% endfor %}
+    </ol>
+</div>

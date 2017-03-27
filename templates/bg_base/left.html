@@ -1,0 +1,18 @@
+<div class="span2">
+    <div class="well sidebar-nav">
+        <ul class="nav nav-list">
+{#            <li class="nav-header"><i class="icon-wrench"></i> Administration</li>#}
+{#            <li class="active"><a href="users.html">Users</a></li>#}
+{#            <li><a href="roles.html">Roles</a></li>#}
+            <li class="nav-header"><i class="icon-signal"></i> 文章管理</li>
+            <li {% if request.path == "/blog/category_add/" %}class="active"{% endif %}><a href="/blog/category_add/">添加分类</a></li>
+            <li {% if request.path == "/blog/category/" %}class="active"{% endif %}><a href="/blog/category/">分类管理</a></li>
+            <li {% if request.path == "/blog/blog_add/" %}class="active"{% endif %}><a href="/blog/blog_add/">添加文章</a></li>
+            <li {% if request.path == "/blog/article_list/" %}class="active"{% endif %}><a href="/blog/article_list/">文章管理</a></li>
+{#            <li class="nav-header"><i class="icon-user"></i> Profile</li>#}
+{#            <li><a href="my-profile.html">My profile</a></li>#}
+{#            <li><a href="#">Settings</a></li>#}
+{#            <li><a href="#">Logout</a></li>#}
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %} {% endblock %}</title>
+{% block messageBox %}
+{% endblock %}
+
+{% block script %}
+{% endblock %}
+
+{% block css_link %}
+    <link href="/static/green/css/bootstrap.css" rel="stylesheet">
+	<link href="/static/green/css/site.css" rel="stylesheet">
+    <link href="/static/green/css/bootstrap-responsive.css" rel="stylesheet">
+{% endblock %}
+
+{% block css_link_append %}
+{% endblock %}
+
+{% block css %}
+    <style type="text/css">
+    html, body {
+        height: 100%;
+    }
+    </style>
+
+    <style type="text/css">
+
+        tbody{font-family:Tahoma,Verdana,微软雅黑,新宋体;font-size:12px}
+
+        h1{font-size:20px}
+    </style>
+
+{% endblock %}
+
+{% block sysBase_css_append %}
+{% endblock %}
+
+{% block css_append %}
+{% endblock %}
+
+{% block scripts_point %}
+{% endblock %}
+
+{% block style_point %}
+{% endblock %}
+
+{% block menus %}
+{% endblock %}
+</head>
+
+<body>
+<!--内容-->
+{% block content %}
+{% endblock %}
+
+<!--JS部分-->
+{% block js_link %}
+    <script src="/static/green/js/jquery.js"></script>
+	<script src="/static/green/js/jquery.flot.js"></script>
+	<script src="/static/green/js/jquery.flot.resize.js"></script>
+	<script src="/static/green/js/bootstrap.min.js"></script>
+    <link media="all" rel="stylesheet" type="text/css" href="/static/simditor/font-awesome-4.7.0/css/font-awesome.css" />
+{% endblock %}
+
+{% block js_link_append %}
+{% endblock %}
+{% block js %}
+{% endblock %}
+{% block base_js %}
+    <script type="text/javascript">
+
+    </script>
+{% endblock %}
+{% block js_append %}
+{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Simditor</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+
+<link media="all" rel="stylesheet" type="text/css" href="../highlight/styles/github.css" />  
+<script type="text/javascript" src="scripts/jquery.min.js"></script>  
+
+<script type="text/javascript" src="../highlight/highlight.pack.js"></script> 
+</head>
+<body>
+<div style="width: 800px; margin-top: 10px">
+	<textarea id="editor" placeholder="这里输入内容" ></textarea> 
+</div>
+
+<div style="width:800px"><blockquote>
+<pre>
+<code class="lang-python">
+import sys
+import MySQLdb
+
+class AutoVivification(dict):
+    """Implementation of perl's autovivification feature."""
+    def __getitem__(self, item):
+         try:
+             return dict.__getitem__(self, item)
+         except KeyError:
+             value = self[item] = type(self)()
+             return value
+
+class Object_new:
+    def __init__(self,host,user,passwd,dbname):
+        '''Initializes the connect Mysql.'''
+        try:
+            conn = MySQLdb.connect(host=host,user=user,passwd=passwd,db=dbname,charset="utf8")
+            cursor = conn.cursor(MySQLdb.cursors.DictCursor)
+            self.this =  cursor
+        except Exception, e:
+            print e
+            sys.exit()
+        
+        # Sayhi this my hi
+    def sayhi(self,hi):
+        print ("This is my test module %s") % (hi)
+
+       # Mysql Select sentence 
+    def this_dbh(self,sql):
+        cursor = self.this
+        cursor.execute(sql)
+        alldata = cursor.fetchall()
+        dict1 = AutoVivification();
+        i = 1
+        for v in alldata:
+            for v_key in v:
+                dict1[i][v_key] = v[v_key]
+            i = i + 1
+        return dict1
+</code>
+</pre>
+</blockquote>
+</div>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+</body>
+</html>

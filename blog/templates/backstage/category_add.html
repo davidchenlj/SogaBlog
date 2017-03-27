@@ -1,0 +1,55 @@
+{% extends "bg_base/base.html" %}
+
+{% load blog_templatetags %}
+{% block content %}
+    
+    <!-- 头部-->
+    {% include 'bg_base/top.html' %}
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <!-- 左侧菜单-->
+            {% include 'bg_base/left.html' %}
+            <div class="span9">
+                <div class="row-fluid">
+                   <div class="page-header">
+				<h1>添加分类 <small></small></h1><div>
+			</div>
+			<form  method="post" class="form-horizontal">{% csrf_token %}
+				<fieldset>
+					<div class="control-group">
+						<label class="control-label" for="role">上一级</label>
+						<div class="controls">
+							<select name="pid">
+                                <option value="0">请选择</option>
+                                {% for row in category %}
+							    	<option value="{{ row.pk }}">{{ row.name }}</option>
+                                {% endfor %}
+							</select>
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" for="city">分类名称</label>
+						<div class="controls">
+                            {{ form.name }}{{ form.name.errors }}
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" for="city">标签颜色</label>
+						<div class="controls">
+                            {{ form.css }}{{ form.css.errors }}
+						</div>
+					</div>
+
+                    <div style="display: none"> {{ form.display }}</div>
+					<div class="form-actions">
+						<input type="submit" class="btn btn-success" value="保存" /> <a class="btn" href="/blog/category/">返回</a>
+					</div>
+				</fieldset>
+			</form>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
