@@ -113,7 +113,6 @@ class ArticleUpdateView(AdminOnlyMixin, UpdateView):
 
 @login_required()
 def del_category(request):
-    ''' 删除菜单'''
     pk = request.REQUEST.get('pk')
     tids = [int(i) for i in pk.split(',')]
     if len(tids) > 0:
@@ -122,7 +121,6 @@ def del_category(request):
 
 @login_required()
 def del_article(request):
-    ''' 删除文章'''
     pk = request.REQUEST.get('pk')
     tids = [int(i) for i in pk.split(',')]
     if len(tids) > 0:
@@ -131,7 +129,6 @@ def del_article(request):
 
 @login_required()
 def uploadImg(request):
-    ''' 上传图片接口 '''
     from blog.utils import save_file
     from SogaBlog import settings
     if request.method == 'POST':
@@ -152,7 +149,6 @@ def uploadImg(request):
             return HttpResponse(json.dumps(dict_tmp))
 
 def Login(request, template_name):
-    ''' 登录 '''
     from django.contrib.auth import authenticate, login, logout
     vt = loader.get_template(template_name)
     if request.POST:
