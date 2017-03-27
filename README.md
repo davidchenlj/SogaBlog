@@ -11,3 +11,5 @@
 5.编辑器采用Simditor v2.3.6
 
 6.前端代码格式采用highlight.js v9.10.0
+
+Demo:http://blog.arthl.com
