@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, url, include
 from django.views.generic import TemplateView
 from blog.libs.backstage.models import category, article
+from views import IndexView, AuthorPostsView
 from blog.libs.index.views import BlogView, BlogDetail
 from blog.libs.backstage.views import CategoryUpdateView, CategoryCreateView, ArticleUpdateView,\
      ArticleCreateView, ArticleView, CategoryView
@@ -13,6 +14,7 @@ urlpatterns = patterns('blog.libs.backstage.views',
 )
 
 urlpatterns += patterns('blog.libs.index.views',
+      url(r'^tag/$', 'tag', {'template_name': 'blog/tag.html'}, name='tag'),
       url(r'^archive/$', 'archive', {'template_name': 'blog/archive.html'}, name='archive'),
       url(r'^about/$', 'about', {'template_name': 'blog/about.html'}, name='about'),
 )

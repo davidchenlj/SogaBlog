@@ -30,7 +30,7 @@ class category(models.Model):
         return self.name
 
 class article(models.Model):
-    title = models.CharField(u'分类名称', max_length=30)
+    title = models.CharField(u'分类名称', max_length=60)
     img = models.CharField(u'缩略图', max_length=100, null=True,blank=True)
     browse = models.IntegerField('浏览量', default=0, null=True,blank=True)
     pid = models.ForeignKey(category, verbose_name='分类')

@@ -1,0 +1,158 @@
+一、网络接口信息
+ 
+ [root@gateway ~]# ifconfig
+eth0      Link encap:Ethernet  HWaddr A4:BA:DB:26:EF:1F  
+          inet addr:192.168.3.254  Bcast:192.168.3.255  Mask:255.255.255.0
+          inet6 addr: fe80::a6ba:dbff:fe26:ef1f/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:3455536667 errors:2170 dropped:426 overruns:0 frame:435
+          TX packets:3518258336 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:2154758281853 (1.9 TiB)  TX bytes:2308641587019 (2.0 TiB)
+          Interrupt:169 Memory:dfdf0000-dfe00000 
+
+eth1      Link encap:Ethernet  HWaddr A4:BA:DB:26:EF:20  
+          inet addr:192.168.100.254  Bcast:192.168.100.255  Mask:255.255.255.0
+          inet6 addr: fe80::a6ba:dbff:fe26:ef20/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:829881790 errors:0 dropped:80 overruns:0 frame:83
+          TX packets:726408761 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:444970246153 (414.4 GiB)  TX bytes:306208100479 (285.1 GiB)
+          Interrupt:177 Memory:dfef0000-dff00000 
+
+eth3      Link encap:Ethernet  HWaddr 00:15:17:AE:E5:97  
+          inet addr:210.21.243.157  Bcast:210.21.243.255  Mask:255.255.255.0
+          inet6 addr: fe80::215:17ff:feae:e597/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:372425932 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:380566283 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:100 
+          RX bytes:236502137297 (220.2 GiB)  TX bytes:215773104528 (200.9 GiB)
+          Memory:dfcc0000-dfce0000 
+
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:16436  Metric:1
+          RX packets:2091 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:2091 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:185436 (181.0 KiB)  TX bytes:185436 (181.0 KiB)	 
+
+网卡接口信息
+·	eth0：       192.168.3.0/24    注:内部网口,提供给研发客户机使用网段
+·	eth1：       192.168.100.0/24  注:内部网段,提供给研发部服务器使用
+·	eth3：       210.21.243.157     注:公网光纤接口
+
+
+
+
+
+
+二、Top图
+1。网络基top图
+ 
+ 	 
+
+
+
+
+
+
+
+
+  
+2．Tc 规则解释 (100kbit=10KB)
+
+# 清除网卡原有队列规则
+tc qdisc del dev eth0 root 2>/dev/null
+# 定义最顶层(根)队列规则，并指定 default 类别编号
+tc qdisc add dev eth0 root handle 10: htb default 10
+# 定义第一层的 10:1 类别 (上行/下行 总带宽)
+tc class add dev eth0 parent 10: classid 10:1 htb rate 1000Mbit ceil 1000Mbit
+# 默认default 走的规则(定义带宽为1000Mbit)
+tc class add dev eth0 parent 10:1 classid 10:10 htb rate 1000mbit ceil 1000mbit  prio 0
+#在10:1 下定义一个10:11 设置带宽为600kbit优先级为1
+tc class add dev eth0 parent 10:1 classid 10:11 htb rate 600kbit ceil 600kbit  prio 1
+#这里过滤器和10:11关联，句柄号20
+tc filter add dev eth0 parent 10: protocol ip prio 1 handle 20 fw classid 10:11
+#这里就是要限制的IP标记，如果IP写成192.168.3.0/24那么就是共享10:11这个过滤器的带宽
+iptables -t mangle -A POSTROUTING -d 192.168.3.157??-j MARK --set-mark 20
+
+注: 1.这里就是要限制的IP标记需要 3条红色一起才能对单个IP起限速作用。
+    2. 限制上传是在 外网接口,下载是在内网接口做限制,我们现在需要在eth0做下载与限制,需要在真实环境下实验,否则不成功，让我跑了很多弯路。	 
+  
+3．根据上面配置,定义下面脚本 (绿色部分是为我们奇特的网络环境添加的，因为我们要在同一接口实现上/下限制)
+
+ #!/bin/bash
+
+# 定义内网接口
+IDEV="eth0"
+
+# 定义Download带宽
+Download=600kbit
+
+# 内网IP段
+INET="192.168.3."
+
+# 不限速IP 以空格分隔
+VIP="58.251.49.133 58.251.49.134 58.251.49.135 58.251.49.136 61.145.163.73 \
+192.168.3.175 192.168.3.157 192.168.3.99 192.168.3.105 192.168.100.0/24"
+
+# 受限IP范围，IPS 起始IP 、IPE 结束IP
+IPS="2"
+IPE="253"
+
+# 清除网卡原有队列规则
+tc qdisc del dev ${IDEV} root 2>/dev/null
+
+# 定义最顶层(根)队列规则，并指定 default 类别编号
+tc qdisc add dev ${IDEV} root handle 10: htb default 10
+
+# 定义第一层的 10:1 类别 (上行/下行 总带宽)
+tc class add dev ${IDEV} parent 10: classid 10:1 htb rate 1000Mbit ceil 1000Mbit
+
+# 默认default 走的规则
+tc class add dev ${IDEV} parent 10:1 classid 10:10 htb rate 1000mbit ceil 1000mbit  prio 0
+
+# Vip 绑定
+tc filter add dev ${IDEV} parent 10: protocol ip prio 1 handle 10 fw classid 10:10
+
+# 限速循环
+i=$IPS;
+while [ $i -le $IPE ]
+do
+tc class add dev ${IDEV} parent 10:1 classid 10:1${i} htb rate ${Download} ceil ${Download}  prio 20
+tc filter add dev ${IDEV} parent 10: protocol ip prio 20 handle 2${i} fw classid 10:1${i}
+iptables -t mangle -A POSTROUTING -d ${INET}${i}  -j MARK --set-mark 2${i}
+iptables -t mangle -A POSTROUTING -s ${INET}${i}  -j MARK --set-mark 2${i}
+i=`expr ${i} + 1`
+done
+
+#不限速IP循环
+for ip in $VIP
+do
+    iptables -t mangle -A POSTROUTING -d ${ip}  -j MARK --set-mark 10
+    iptables -t mangle -A POSTROUTING -s ${ip}  -j MARK --set-mark 10
+    echo "${ip}"
+done
+#定义来自192.168.3.0/24目标到192.168.3.0/24都不限速
+iptables -t mangle -A POSTROUTING -s 192.168.3.0/24 -d 192.168.3.0/24 -j MARK --set-mark 10
+
+#注:10:1这才是父类 子类是在10:1下在建立的   比如 10:12  10:14 10:15 等等 ，如果变成 10:31 10:32 这个父类就不是10:1了 而是10:3是不能使用的,而且子类不能相同。	 
+
+
+
+
+
+  
+#下载不限速效果
+ 
+#下载限速后的效果
+ 
+#上传后限制效果
+ 	 
+
+
+

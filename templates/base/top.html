@@ -9,6 +9,7 @@
     <nav class="blog-nav">
       <a class="blog-nav-item {% if request.path == "/blog/index/" %}active{% endif %}" href="{% url 'blog_index' %}"><i class="menu-item-icon fa fa-fw fa-home"></i>首页</a>
       <a class="blog-nav-item {% if request.path == "/blog/archive/" %}active{% endif %}" href="{% url 'archive' %}" href="#"><i class="menu-item-icon fa fa-fw fa-archive"></i>归档</a>
+      <a class="blog-nav-item {% if request.path == "/blog/tag/" %}active{% endif %}" href="{% url 'tag' %}" href="#"><i class="menu-item-icon fa fa-fw fa-tags"></i>标签</a>
       <a class="blog-nav-item {% if request.path == "/blog/about/" %}active{% endif %}" href="{% url 'about' %}" href="#"><i class="menu-item-icon fa fa-fw fa-user"></i>关于</a>
 	 <form class="navbar-form navbar-right" _lpchecked="1">
             <div class="form-group">

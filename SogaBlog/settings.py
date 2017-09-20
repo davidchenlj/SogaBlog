@@ -23,9 +23,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '@=x@rz=u42a&gqll4baxr5rq+*6j4ct7--wbh+2e!p%1oif24k'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG =True
+#DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['10.1.10.191']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -80,9 +81,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'sogablog',                      # Or path to database file if using sqlite3.
-        'USER': 'root',                      # Not used with sqlite3.
-        'PASSWORD': '110110',                  # Not used with sqlite3.
-        'HOST': '10.1.10.191',                      # Set to empty string for localhost. Not used with sqlite3.
+        'USER': 'chenlj',                      # Not used with sqlite3.
+        'PASSWORD': 'aaAA.123',                  # Not used with sqlite3.
+        'HOST': '127.0.0.1',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '3306',                      # Set to empty string for default. Not used with sqlite3.
     }
 }

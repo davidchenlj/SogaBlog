@@ -58,6 +58,15 @@ def archive(request, template_name):
     '''  归档 '''
     return render(request, template_name, {'content':'没啥内容,先不归档...'})
 
+def tag(request, template_name):
+    '''  归档 '''
+    queryset=article.objects.all()
+    _TAG=[]
+    for row in queryset:
+        for _tag in row.tag.split(','): _TAG.append(_tag)
+    _TAG_LIST=set(list(_TAG))
+    return render(request, template_name, {'content':'没啥内容,先不归档...', 'TAG_LIST' : _TAG_LIST})
+
 def about(request, template_name):
     ''' 关于 '''
     return render(request, template_name, {'content':'作者毕业于蓝翔高级技工学校已经学会了会用电脑操控挖掘机炒菜...'})
